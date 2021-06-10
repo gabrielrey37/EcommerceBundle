@@ -31,7 +31,7 @@ class Cart extends FormEntity
 
     private $cartLines;
 
-    private $productsCount = 15;
+    private $productsCount = 0;
 
     private $type;
 

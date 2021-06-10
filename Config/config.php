@@ -24,6 +24,12 @@ return array(
                 'parent'   => 'mautic.ecommerce',
                 'priority' => 10,
             ],
+            'mautic.ecommerce.orders' => [
+                'route'    => 'mautic_order_index',
+                'access'   => 'ecommerce:orders:view',
+                'parent'   => 'mautic.ecommerce',
+                'priority' => 10,
+            ],
         ],
     ],
     'routes' => [
@@ -44,6 +50,14 @@ return array(
                 'path'       => '/carts/{objectAction}/{objectId}',
                 'controller' => 'EcommerceBundle:Cart:execute',
             ],
+            'mautic_order_index' => [
+                'path'       => '/orders/{page}',
+                'controller' => 'EcommerceBundle:Order:index',
+            ],
+            'mautic_order_action' => [
+                'path'       => '/orders/{objectAction}/{objectId}',
+                'controller' => 'EcommerceBundle:Order:execute',
+            ],
         ],
         'api' => [
             'mautic_api_productstandard' => [
@@ -61,6 +75,9 @@ return array(
             ],
             'mautic.cart.model.cart' => [
                 'class' => \MauticPlugin\EcommerceBundle\Model\CartModel::class
+            ],
+            'mautic.order.model.order' => [
+                'class' => \MauticPlugin\EcommerceBundle\Model\OrderModel::class
             ],
             'mautic.productcategory.model.productcategory' => [
                 'class' => \MauticPlugin\EcommerceBundle\Model\ProductCategoryModel::class
