@@ -11,6 +11,7 @@ Override PgeModel HitPage to include product viewed<br>
 ###Products
 ![](docs/img/Products-01.png)
 ![](docs/img/Products-02.png)
+![](docs/img/Products-03.png)
 
 ###Carts
 ![](docs/img/Carts-01.png)
