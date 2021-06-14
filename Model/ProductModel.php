@@ -91,7 +91,6 @@ class ProductModel extends FormModel{
         $query = new ChartQuery($this->em->getConnection(), $dateFrom, $dateTo);
         $q     = $query->prepareTimeDataQuery('page_hits', 'date_hit', $filter);
 
-
         if (!$canViewOthers) {
             $q->andWhere('p.created_by = :userId')
               ->setParameter('userId', $this->userHelper->getUser()->getId());
@@ -99,8 +98,12 @@ class ProductModel extends FormModel{
 
         $data = $query->loadAndBuildTimeData($q);
 
-        $chart->setDataset($this->translator->trans('mautic.ecommerce.viewscount'), $data);
+        $chart->setDataset($this->translator->trans('mautic.ecommerce.graph.product.line.views'), $data);
 
+        $q     = $query->prepareTimeDataQuery('order_rows', 'date_add', $filter);
+
+        $data2 = $query->loadAndBuildTimeData($q);
+        $chart->setDataset($this->translator->trans('mautic.ecommerce.graph.product.line.sales'), $data2);
         return $chart->render();
     }
 }

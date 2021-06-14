@@ -66,7 +66,7 @@ if ('index' == $tmpl) {
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'product',
-                        'orderBy'    => 'p.id',
+                        'orderBy'    => 'p.productId',
                         'text'       => 'mautic.ecommerce.externalId',
                         'class'      => 'visible-md visible-lg col-asset-id',
                     ]
@@ -134,8 +134,8 @@ if ('index' == $tmpl) {
                         <?php $color    = ($category) ? '#'.$category->getColor() : 'inherit'; ?>
                         <span style="white-space: nowrap;"><span class="label label-default pa-4" style="border: 1px solid #d5d5d5; background: <?php echo $color; ?>;"> </span> <span><?php echo $catName; ?></span></span>
                     </td>
-                    <td class="visible-md visible-lg"><?php echo $item->getProductAttributeId(); ?></td>
                     <td class="visible-md visible-lg"><?php echo $item->getProductId(); ?></td>
+                    <td class="visible-md visible-lg"><?php echo $item->getProductAttributeId(); ?></td>
                     <td class="visible-md visible-lg"><?php echo $item->getId(); ?></td>
                 </tr>
             <?php endforeach; ?>
