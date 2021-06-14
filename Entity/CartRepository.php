@@ -10,10 +10,15 @@ class CartRepository extends CommonRepository
 {
     public function getEntities(array $args = [])
     {
-         $q = $this
+        /*
+        $q = $this
+            ->createQueryBuilder('ca')
+            ->select('ca', 'ord')
+            ->Join(Order::class,'ord');*/
+
+        $q = $this
             ->createQueryBuilder('ca')
             ->select('ca');
-
         $args['qb'] = $q;
 
         return parent::getEntities($args);

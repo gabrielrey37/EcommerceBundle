@@ -86,4 +86,15 @@ class CartModel extends FormModel{
 
         return $chart->render();
     }
+
+    public function abandonedCart(){
+        $orderRepository = $this->em->getRepository('EcommerceBundle:Order');
+        $order = $orderRepository->findOneBy([
+            'cart' => $this,
+        ]);
+        if ($order){
+            return 'comprado';
+        }
+        return 'Abandonado';
+    }
 }

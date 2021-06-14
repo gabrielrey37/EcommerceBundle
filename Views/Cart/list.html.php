@@ -8,8 +8,12 @@
  *
  * @license     GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
+
+use MauticPlugin\EcommerceBundle\Model\CartModel;
+
 if ('index' == $tmpl) {
     $view->extend('EcommerceBundle:Cart:index.html.php');
+
 }
 
 
@@ -26,7 +30,7 @@ if ('index' == $tmpl) {
                     [
                         'sessionVar' => 'cart',
                         'text'       => 'mautic.ecommerce.lead',
-                        //'orderBy'    => 'ca.cartId',
+                        'orderBy'    => 'ca.lead',
                         //'class'      => 'col-product-image',
                         'default'    => false,
                     ]
@@ -60,6 +64,7 @@ if ('index' == $tmpl) {
                     [
                         'sessionVar' => 'cart',
                         'text'       => 'mautic.ecommerce.cart.productsCount',
+                        //'orderBy'    => 'ca.productsCount',
                         'class'      => 'col-product-name',
                         'default'    => false,
                     ]
@@ -75,16 +80,16 @@ if ('index' == $tmpl) {
                         'default'    => true,
                     ]
                 );
-/*
                 echo $view->render(
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
-                        'sessionVar' => 'product',
-                        'orderBy'    => 'a.downloadCount',
-                        'text'       => 'mautic.asset.asset.thead.download.count',
-                        'class'      => 'visible-md visible-lg col-asset-download-count',
+                        'sessionVar' => 'cart',
+                        //'orderBy'    => 'ca.lead',
+                        'text'       => 'mautic.ecommerce.abandoned_cart',
+                        //'class'      => 'col-product-name',
+                        'default'    => true,
                     ]
-                );*/
+                );
 
                 ?>
             </tr>
@@ -125,7 +130,16 @@ if ('index' == $tmpl) {
                         <?php $reference = $item->getProductsCount(); ?>
                         <span><?php echo $reference; ?></span>
                     </td>
-                    <td class="visible-md visible-lg"><?php echo $item->getTotal(); ?></td>
+                    <td class="visible-md visible-lg"><?php echo $item->getTotal();?></td>
+                    <td class="visible-md visible-lg"><?php
+                        $order =$item->getOrder();
+                        if ($order){
+                            echo $item->getOrder()->getId();
+                        }
+                        else{
+                            echo 'abandoned cart';
+                        }
+                        ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

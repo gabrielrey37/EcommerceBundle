@@ -98,10 +98,18 @@ return array(
             ],
         ],
         'other' => [
-                    'mautic.ecommerce.doctrineeventssubscriber.subscriber' => [
-                        'class' => \MauticPlugin\EcommerceBundle\EventListener\DoctrineEventsSubscriber::class,
-                        'tag'       => 'doctrine.event_subscriber',
-                    ],
+            'mautic.ecommerce.doctrineeventssubscriber.subscriber' => [
+                'class' => \MauticPlugin\EcommerceBundle\EventListener\DoctrineEventsSubscriber::class,
+                'tag'       => 'doctrine.event_subscriber',
+            ],
         ],
+        'events' =>[
+            'mautic.ecommerce.campaignbundle.condition_subscriber' => [
+                'class'     => \MauticPlugin\EcommerceBundle\EventListener\CampaignConditionSubscriber::class,
+                'arguments' => [
+                    'mautic.cart.model.cart',
+                ],
+            ],
+        ]
     ],
 );

@@ -158,9 +158,11 @@ class Order extends FormEntity
             ->columnName('reference')
             ->build();
 
-        $builder->createManyToOne('cartId', Cart::class)
-            ->addJoinColumn('cart_id', 'id', true, false)
+        $builder->createOneToOne('cartId', Cart::class)
+            ->inversedBy('order')
+            ->addJoinColumn('cart_id', 'id')
             ->build();
+
 
         $builder->createField('shopId', 'integer')
             ->columnName('shop_id')

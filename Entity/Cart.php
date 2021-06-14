@@ -35,6 +35,8 @@ class Cart extends FormEntity
 
     private $type;
 
+    private $order;
+
     public function __construct()
     {
         $this->cartLines = new ArrayCollection();
@@ -80,6 +82,13 @@ class Cart extends FormEntity
 
         $builder->createField('addressInvoiceId', 'integer')
             ->columnName('address_invoice_id')
+            ->build();
+
+        $builder->createOneToOne('order', Order::class)
+            ->mappedBy('cartId')
+            //->addJoinColumn('order', 'id', true, false)
+            ->fetchExtraLazy()
+            ->cascadeAll()
             ->build();
     }
 
@@ -182,17 +191,7 @@ class Cart extends FormEntity
     {
         $this->addressInvoiceId = $addressInvoiceId;
     }
-/*
-    public function getLead()
-    {
-        return $this->lead;
-    }
 
-    public function setLead($lead)
-    {
-        $this->lead = $lead;
-    }
-*/
     public function getGift()
     {
         return $this->gift;
@@ -222,6 +221,16 @@ class Cart extends FormEntity
     public function getType()
     {
         return $this->type;
+    }
+
+    public function setOrder(Order $order)
+    {
+        $this->order = $order;
+    }
+
+    public function getOrder()
+    {
+        return $this->order;
     }
 
 }
