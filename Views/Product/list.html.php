@@ -20,24 +20,12 @@ if ('index' == $tmpl) {
             <thead>
             <tr>
                 <?php
-                echo $view->render(
-                    'MauticCoreBundle:Helper:tableheader.html.php',
-                    [
-                        'checkall'        => 'true',
-                        'target'          => '#productTable',
-                        'langVar'         => 'ecommerce.product',
-                        'routeBase'       => 'product',
-                        'templateButtons' => [
-                            'delete' => $permissions['ecommerce:products:deleteown'] || $permissions['ecommerce:products:deleteother'],
-                        ],
-                    ]
-                );
 
                 echo $view->render(
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'product',
-                        'text'       => 'mautic.ecommerce.product.image',
+                        'text'       => 'mautic.ecommerce.image',
                         'class'      => 'col-product-image',
                         'default'    => false,
                     ]
@@ -48,7 +36,7 @@ if ('index' == $tmpl) {
                     [
                         'sessionVar' => 'product',
                         'orderBy'    => 'p.name',
-                        'text'       => 'mautic.core.title',
+                        'text'       => 'mautic.core.name',
                         'class'      => 'col-product-name',
                         'default'    => true,
                     ]
@@ -59,7 +47,7 @@ if ('index' == $tmpl) {
                     [
                         'sessionVar' => 'product',
                         'orderBy'    => 'p.reference',
-                        'text'       => 'mautic.ecommerce.product.reference',
+                        'text'       => 'mautic.ecommerce.reference',
                         'class'      => 'visible-md visible-lg col-asset-category',
                     ]
                 );
@@ -73,16 +61,26 @@ if ('index' == $tmpl) {
                         'class'      => 'visible-md visible-lg col-asset-category',
                     ]
                 );
-/*
+
                 echo $view->render(
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'product',
-                        'orderBy'    => 'a.downloadCount',
-                        'text'       => 'mautic.asset.asset.thead.download.count',
-                        'class'      => 'visible-md visible-lg col-asset-download-count',
+                        'orderBy'    => 'p.id',
+                        'text'       => 'mautic.ecommerce.externalId',
+                        'class'      => 'visible-md visible-lg col-asset-id',
                     ]
-                );*/
+                );
+
+                echo $view->render(
+                    'MauticCoreBundle:Helper:tableheader.html.php',
+                    [
+                        'sessionVar' => 'product',
+                        'orderBy'    => 'p.id',
+                        'text'       => 'mautic.ecommerce.combinationid',
+                        'class'      => 'visible-md visible-lg',
+                    ]
+                );
 
                 echo $view->render(
                     'MauticCoreBundle:Helper:tableheader.html.php',
@@ -99,38 +97,12 @@ if ('index' == $tmpl) {
             <tbody>
             <?php foreach ($items as $k => $item): ?>
                 <tr>
-                    <td>
-                        <?php
-                        echo $view->render(
-                            'MauticCoreBundle:Helper:list_actions.html.php',
-                            [
-                                'item'            => $item,
-                                'templateButtons' => [
-                                    'edit' => $view['security']->hasEntityAccess(
-                                        $permissions['ecommerce:products:editown'],
-                                        $permissions['ecommerce:products:editother'],
-                                        $item->getCreatedBy()
-                                    ),
-                                    'delete' => $view['security']->hasEntityAccess(
-                                        $permissions['ecommerce:products:deleteown'],
-                                        $permissions['ecommerce:products:deleteother'],
-                                        $item->getCreatedBy()
-                                    ),
-                                    'clone' => $permissions['ecommerce:products:create'],
-                                ],
-                                'routeBase'     => 'product',
-                                'langVar'       => 'product.product',
-                                'nameGetter'    => 'getName',
-                            ]
-                        );
-                        ?>
-                    </td>
-                    <td class="visible-md visible-lg">
+                    <td class="">
 
                         <a href="<?php echo $view['router']->path(
                             'mautic_product_action',
                             ['objectAction' => 'view', 'objectId' => $item->getId()]
-                        ); ?>"
+                        ); ?>" data-toggle="ajax"
                            >
                             <img src="<?php echo $view['assets']->getUrl('plugins/PrestashopEcommerceBundle/Assets/img/products/' . $item->getImageUrl()) ?>" alt="<?php echo $item->getName(); ?>" class="img-thumbnail" style="max-width: 100px; display: block; margin: auto"/>
                         </a>
@@ -138,13 +110,6 @@ if ('index' == $tmpl) {
                     </td>
                     <td>
                         <div>
-                            <?php echo $view->render(
-                                'MauticCoreBundle:Helper:publishstatus_icon.html.php',
-                                [
-                                    'item'  => $item,
-                                    'model' => 'product.product',
-                                ]
-                            ); ?>
                             <a href="<?php echo $view['router']->path(
                                 'mautic_product_action',
                                 ['objectAction' => 'view', 'objectId' => $item->getId()]
@@ -169,7 +134,8 @@ if ('index' == $tmpl) {
                         <?php $color    = ($category) ? '#'.$category->getColor() : 'inherit'; ?>
                         <span style="white-space: nowrap;"><span class="label label-default pa-4" style="border: 1px solid #d5d5d5; background: <?php echo $color; ?>;"> </span> <span><?php echo $catName; ?></span></span>
                     </td>
-                    
+                    <td class="visible-md visible-lg"><?php echo $item->getProductAttributeId(); ?></td>
+                    <td class="visible-md visible-lg"><?php echo $item->getProductId(); ?></td>
                     <td class="visible-md visible-lg"><?php echo $item->getId(); ?></td>
                 </tr>
             <?php endforeach; ?>

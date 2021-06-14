@@ -4,11 +4,6 @@ namespace MauticPlugin\EcommerceBundle\Controller;
 
 use Mautic\CoreBundle\Controller\AbstractStandardFormController;
 use Mautic\CoreBundle\Form\Type\DateRangeType;
-use MauticPlugin\MauticFocusBundle\Entity\Focus;
-use MauticPlugin\MauticFocusBundle\Model\FocusModel;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 
 class ProductController extends AbstractStandardFormController

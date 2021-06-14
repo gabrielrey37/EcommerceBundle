@@ -12,41 +12,6 @@ $view->extend('MauticCoreBundle:Default:content.html.php');
 $view['slots']->set('mauticContent', 'product');
 $view['slots']->set('headerTitle', $item->getName());
 
-$view['slots']->set(
-    'actions',
-    $view->render(
-        'MauticCoreBundle:Helper:page_actions.html.php',
-        [
-            'item'            => $item,
-            'templateButtons' => [
-                'edit' => $view['security']->hasEntityAccess(
-                    $permissions['ecommerce:products:editown'],
-                    $permissions['ecommerce:products:editother'],
-                    $item->getCreatedBy()
-                ),
-                'clone'  => $permissions['ecommerce:products:create'],
-                'delete' => $view['security']->hasEntityAccess(
-                    $permissions['ecommerce:products:deleteown'],
-                    $permissions['ecommerce:products:deleteother'],
-                    $item->getCreatedBy()
-                ),
-                'close' => $view['security']->hasEntityAccess(
-                    $permissions['ecommerce:products:viewown'],
-                    $permissions['ecommerce:products:viewother'],
-                    $item->getCreatedBy()
-                ),
-            ],
-            'routeBase'  => 'product',
-            'langVar'    => 'product.product',
-        ]
-    )
-);
-
-$view['slots']->set(
-    'publishStatus',
-    $view->render('MauticCoreBundle:Helper:publishstatus_badge.html.php', ['entity' => $item])
-);
-
 ?>
 
 <!-- start: box layout -->
@@ -111,7 +76,7 @@ $view['slots']->set(
                                 <div class="col-md-2 va-m">
                                     <h5 class="text-white dark-md fw-sb mb-xs">
                                         <span class="fa fa-chrome"></span>
-                                        <?php echo $view['translator']->trans('mautic.ecommerce.graph.line.views'); ?>
+                                        <?php echo $view['translator']->trans('mautic.ecommerce.graph.product.line.views'); ?>
                                     </h5>
                                 </div>
                                 
@@ -138,21 +103,21 @@ $view['slots']->set(
             <div class="row">
                 <div class="col-md-6">
                     <img src="<?php echo $view['assets']->getUrl('plugins/PrestashopEcommerceBundle/Assets/img/products/' . $item->getImageUrl()) ?>" alt="<?php echo $item->getName(); ?>" class="img-thumbnail" />
-                    <h6><?php echo $view['translator']->trans('mautic.ecommerce.product.reference'); ?></h6>
-                    <p><?php echo $item->getReference(); ?></p>
-                    <h6><?php echo $view['translator']->trans('mautic.ecommerce.product.url'); ?></h6>
-                    <p><?php echo $item->getUrl(); ?></p>
                 </div>
                 
                 <div class="col-md-6">
-                    <h6><?php echo $view['translator']->trans('mautic.ecommerce.product.shortDescription'); ?></h6>
+                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.reference'); ?></strong></h6>
+                    <p><?php echo $item->getReference(); ?></p>
+                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.product.shortDescription'); ?></strong></h6>
                     <p><?php echo $item->getShortDescription(); ?></p>
-                    <h6><?php echo $view['translator']->trans('mautic.ecommerce.product.price'); ?></h6>
-                    <p><?php echo $item->getPrice(); ?></p>
-                    <h6><?php echo $view['translator']->trans('mautic.ecommerce.product.taxPercent'); ?></h6>
-                    <p><?php echo $item->getTaxPercent(); ?></p>
-                    <h6><?php echo $view['translator']->trans('mautic.ecommerce.product.longDescription'); ?></h6>
+                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.price'); ?></strong></h6>
+                    <p><?php echo '$ ' .number_format($item->getPrice(), 2); //TODO CURRENCY ?></p>
+                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.product.taxPercent'); ?></strong></h6>
+                    <p><?php echo '% ' . $item->getTaxPercent(); ?></p>
+                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.product.longDescription'); ?></strong></h6>
                     <p><?php echo $item->getLongDescription(); ?></p>
+                    <h6><strong><?php echo $view['translator']->trans('mautic.ecommerce.url'); ?></strong></h6>
+                    <p><?php echo $item->getUrl(); ?></p>
                 </div>
             </div>
         </div>

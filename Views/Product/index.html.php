@@ -12,31 +12,6 @@ $view->extend('MauticCoreBundle:Default:content.html.php');
 $view['slots']->set('mauticContent', 'product');
 $view['slots']->set('headerTitle', $view['translator']->trans('mautic.ecommerce.products'));
 
-$view['slots']->set(
-    'actions',
-    $view->render(
-        'MauticCoreBundle:Helper:page_actions.html.php',
-        [
-            'templateButtons' => [
-                'new' => $permissions['ecommerce:products:create'],
-            ],
-            'routeBase' => 'product',
-        ]
-    )
-);
-
-$toolbarButtons[] = [
-    'attr' => [
-        'class'          => 'hidden-xs btn btn-default btn-sm btn-nospin',
-        'href'           => 'javascript: void(0)',
-        'onclick'        => 'Mautic.toggleCombinations();',
-        'id'             => 'anonymousLeadButton',
-        'data-anonymous' => $view['translator']->trans('mautic.ecommerce.product.searchcommand.showcombinations'),
-    ],
-    'tooltip'   => $view['translator']->trans('mautic.lead.lead.anonymous_leads'),
-    'iconClass' => 'fa fa-user-secret',
-];
-
 ?>
 
 <div class="panel panel-default bdr-t-wdh-0 mb-0">

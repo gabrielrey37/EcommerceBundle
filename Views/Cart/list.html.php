@@ -15,8 +15,6 @@ if ('index' == $tmpl) {
     $view->extend('EcommerceBundle:Cart:index.html.php');
 
 }
-
-
 ?>
 <?php if (count($items)): ?>
     <div class="table-responsive">
@@ -31,7 +29,6 @@ if ('index' == $tmpl) {
                         'sessionVar' => 'cart',
                         'text'       => 'mautic.ecommerce.lead',
                         'orderBy'    => 'ca.lead',
-                        //'class'      => 'col-product-image',
                         'default'    => false,
                     ]
                 );
@@ -41,9 +38,8 @@ if ('index' == $tmpl) {
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'cart',
-                        'text'       => 'mautic.ecommerce.cart.cartId',
-                        'orderBy'    => 'ca.cartId',
-                        'class'      => 'col-product-image',
+                        'text'       => 'mautic.ecommerce.externalId',
+                        'class'      => 'visible-md visible-lg col-asset-id',
                         'default'    => false,
                     ]
                 );
@@ -54,19 +50,8 @@ if ('index' == $tmpl) {
                         'sessionVar' => 'cart',
                         'orderBy'    => 'ca.shopId',
                         'text'       => 'mautic.ecommerce.shopId',
-                        'class'      => 'col-product-name',
+                        'class'      => 'visible-md visible-lg col-asset-id',
                         'default'    => true,
-                    ]
-                );
-
-                echo $view->render(
-                    'MauticCoreBundle:Helper:tableheader.html.php',
-                    [
-                        'sessionVar' => 'cart',
-                        'text'       => 'mautic.ecommerce.cart.productsCount',
-                        //'orderBy'    => 'ca.productsCount',
-                        'class'      => 'col-product-name',
-                        'default'    => false,
                     ]
                 );
 
@@ -84,21 +69,37 @@ if ('index' == $tmpl) {
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'cart',
-                        //'orderBy'    => 'ca.lead',
-                        'text'       => 'mautic.ecommerce.abandoned_cart',
-                        //'class'      => 'col-product-name',
+                        'text'       => 'mautic.ecommerce.order',
                         'default'    => true,
                     ]
                 );
 
+                echo $view->render(
+                    'MauticCoreBundle:Helper:tableheader.html.php',
+                    [
+                        'sessionVar' => 'cart',
+                        'orderBy'    => 'ca.dateModified',
+                        'text'       => 'mautic.ecommerce.date',
+                    ]
+                );
+
+                echo $view->render(
+                    'MauticCoreBundle:Helper:tableheader.html.php',
+                    [
+                        'sessionVar' => 'cart',
+                        'orderBy'    => 'ca.id',
+                        'text'       => 'mautic.core.id',
+                        'class'      => 'col-asset-id',
+                    ]
+                );
                 ?>
+
             </tr>
             </thead>
             <tbody>
             <?php foreach ($items as $k => $item): ?>
                 <tr>
-
-                    <td class="visible-md visible-lg">
+                    <td class="">
                         <?php if ($item->getLead()):?>
                         <a href="<?php echo $view['router']->path(
                             'mautic_contact_action',
@@ -113,33 +114,42 @@ if ('index' == $tmpl) {
                     </td>
 
                     <td class="visible-md visible-lg">
-                        <a href="<?php echo $view['router']->path(
-                            'mautic_cart_action',
-                            ['objectAction' => 'view', 'objectId' => $item->getId()]
-                        ); ?>"
-                        >
                             <span><?php echo $item->getCartId(); ?></span>
-                        </a>
-
                     </td>
                     <td class="visible-md visible-lg">
                         <?php $reference = $item->getShopId(); ?>
                         <span><?php echo $reference; ?></span>
                     </td>
-                    <td class="visible-md visible-lg">
-                        <?php $reference = $item->getProductsCount(); ?>
-                        <span><?php echo $reference; ?></span>
-                    </td>
-                    <td class="visible-md visible-lg"><?php echo $item->getTotal();?></td>
-                    <td class="visible-md visible-lg"><?php
+                    <td class="text-right"><?php echo '$ ' .number_format($item->getTotal(), 2); //TODO CURRENCY ?></td>
+                    <td class=""><?php
                         $order =$item->getOrder();
                         if ($order){
-                            echo $item->getOrder()->getId();
+                            ?>
+                            <a href="<?php echo $view['router']->path(
+                            'mautic_order_action',
+                            ['objectAction' => 'view', 'objectId' => $item->getOrder()->getId()]
+                        ); ?>"
+                            >
+                            <?php echo $item->getOrder()->getReference(); ?>
+                            </a>
+                            <?php
                         }
                         else{
-                            echo 'abandoned cart';
-                        }
+                            echo $view['translator']->trans('mautic.ecommerce.abandonedcart');
+                        }?>
+                        </td>
+                    <td class=""><?php
+                        echo $item->getDateModified()->format('Y-m-d H:i:s');;
                         ?></td>
+                    <td class="">
+                        <a href="<?php echo $view['router']->path(
+                            'mautic_cart_action',
+                            ['objectAction' => 'view', 'objectId' => $item->getId()]
+                        ); ?>" data-toggle="ajax"
+                        >
+                            <span><?php echo $item->getId(); ?></span>
+                        </a>
+                    </td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

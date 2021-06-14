@@ -26,20 +26,17 @@ if ('index' == $tmpl) {
                     [
                         'sessionVar' => 'order',
                         'text'       => 'mautic.ecommerce.lead',
-                        //'orderBy'    => 'ord.orderId',
-                        //'class'      => 'col-product-image',
                         'default'    => false,
                     ]
                 );
-
 
                 echo $view->render(
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'order',
-                        'text'       => 'mautic.ecommerce.order.orderId',
+                        'text'       => 'mautic.ecommerce.externalId',
+                        'class'      => 'visible-md visible-lg',
                         'orderBy'    => 'ord.orderId',
-                        'class'      => 'col-product-image',
                         'default'    => false,
                     ]
                 );
@@ -50,7 +47,7 @@ if ('index' == $tmpl) {
                         'sessionVar' => 'order',
                         'orderBy'    => 'ord.shopId',
                         'text'       => 'mautic.ecommerce.shopId',
-                        'class'      => 'col-product-name',
+                        'class'      => 'visible-md visible-lg',
                         'default'    => true,
                     ]
                 );
@@ -59,11 +56,12 @@ if ('index' == $tmpl) {
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
                         'sessionVar' => 'order',
-                        'text'       => 'mautic.ecommerce.order.productsCount',
-                        'class'      => 'col-product-name',
-                        'default'    => false,
+                        'orderBy'    => 'ord.reference',
+                        'text'       => 'mautic.ecommerce.reference',
+                        'default'    => true,
                     ]
                 );
+
 
                 echo $view->render(
                     'MauticCoreBundle:Helper:tableheader.html.php',
@@ -75,16 +73,25 @@ if ('index' == $tmpl) {
                         'default'    => true,
                     ]
                 );
-/*
+
                 echo $view->render(
                     'MauticCoreBundle:Helper:tableheader.html.php',
                     [
-                        'sessionVar' => 'product',
-                        'orderBy'    => 'a.downloadCount',
-                        'text'       => 'mautic.asset.asset.thead.download.count',
-                        'class'      => 'visible-md visible-lg col-asset-download-count',
+                        'sessionVar' => 'order',
+                        'orderBy'    => 'ca.dateAdded',
+                        'text'       => 'mautic.ecommerce.date',
                     ]
-                );*/
+                );
+
+                echo $view->render(
+                    'MauticCoreBundle:Helper:tableheader.html.php',
+                    [
+                        'sessionVar' => 'order',
+                        'orderBy'    => 'ord.id',
+                        'text'       => 'mautic.core.id',
+                        'class'      => 'col-asset-id',
+                    ]
+                );
 
                 ?>
             </tr>
@@ -93,7 +100,7 @@ if ('index' == $tmpl) {
             <?php foreach ($items as $k => $item): ?>
                 <tr>
 
-                    <td class="visible-md visible-lg">
+                    <td class="">
                         <?php if ($item->getLead()):?>
                         <a href="<?php echo $view['router']->path(
                             'mautic_contact_action',
@@ -108,24 +115,33 @@ if ('index' == $tmpl) {
                     </td>
 
                     <td class="visible-md visible-lg">
+                        <?php echo $item->getOrderId(); ?>
+                    </td>
+                    <td class="visible-md visible-lg">
+                        <span><?php echo $item->getShopId(); ?></span>
+                    </td>
+                    <td class="">
                         <a href="<?php echo $view['router']->path(
                             'mautic_order_action',
                             ['objectAction' => 'view', 'objectId' => $item->getId()]
-                        ); ?>"
+                        ); ?>" data-toggle="ajax"
                         >
-                            <span><?php echo $item->getOrderId(); ?></span>
+                        <span><?php echo $item->getReference(); ?></span>
                         </a>
-
                     </td>
-                    <td class="visible-md visible-lg">
-                        <?php $reference = $item->getShopId(); ?>
-                        <span><?php echo $reference; ?></span>
+                    <td class="text-right"><?php echo '$ ' .number_format($item->getTotalProducts(), 2); //TODO CURRENCY ?></td>
+                    <td class=""><?php
+                        echo $item->getDateAdded()->format('Y-m-d H:i:s');;
+                        ?></td>
+                    <td class="">
+                        <a href="<?php echo $view['router']->path(
+                            'mautic_order_action',
+                            ['objectAction' => 'view', 'objectId' => $item->getId()]
+                        ); ?>" data-toggle="ajax"
+                        >
+                            <span><?php echo $item->getId(); ?></span>
+                        </a>
                     </td>
-                    <td class="visible-md visible-lg">
-                        <?php $reference = $item->getProductsCount(); ?>
-                        <span><?php echo $reference; ?></span>
-                    </td>
-                    <td class="visible-md visible-lg"><?php echo $item->getTotalProducts(); ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

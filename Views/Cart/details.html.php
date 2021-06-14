@@ -10,7 +10,7 @@
  */
 $view->extend('MauticCoreBundle:Default:content.html.php');
 $view['slots']->set('mauticContent', 'cart');
-$view['slots']->set('headerTitle', $item->getCartId());
+$view['slots']->set('headerTitle', $view['translator']->trans('mautic.ecommerce.cart') . ' ' . $view['translator']->trans('mautic.ecommerce.externalId') . ': ' . $item->getCartId());
 
 ?>
 
@@ -63,19 +63,37 @@ $view['slots']->set('headerTitle', $item->getCartId());
 
         </div>
 
-        <?php echo $view['content']->getCustomContent('details.stats.graph.below', $mauticTemplateVars); ?>
-
         <!-- start: tab-content -->
         <div class="tab-content pa-md preview-detail">
             <div class="row">
                 <div class="col-md-6">
-                    <h6><?php echo $view['translator']->trans('mautic.ecommerce.cart.cartId'); ?></h6>
+                    <h6><?php echo $view['translator']->trans('mautic.core.id'); ?></h6>
                     <p><?php echo $item->getCartId(); ?></p>
                 </div>
                 
                 <div class="col-md-6">
-                    <h6><?php echo $view['translator']->trans('mautic.ecommerce.cart.productsCount'); ?></h6>
-                    <p><?php echo $item->getProductsCount(); ?></p>
+                    <h6><?php echo $view['translator']->trans('mautic.ecommerce.order'); ?></h6>
+                    <?php
+                    $order =$item->getOrder();
+                    if ($order){
+                    ?>
+                        <p>
+                    <a href="<?php echo $view['router']->path(
+                        'mautic_order_action',
+                        ['objectAction' => 'view', 'objectId' => $item->getOrder()->getId()]
+                    ); ?>"
+                    >
+                        <?php echo $item->getOrder()->getReference(); ?>
+                    </a></p>
+                    <?php
+                        }
+                    else {
+                        ?>
+                        <p><?php echo $view['translator']->trans('mautic.ecommerce.abandonedcart'); ?></p>
+                        <?php
+                    }
+                    ?>
+
                 </div>
             </div>
             <div class="row">
@@ -88,9 +106,6 @@ $view['slots']->set('headerTitle', $item->getCartId());
                             [
                                 'sessionVar' => 'cartline',
                                 'text'       => 'mautic.ecommerce.image',
-                                //'orderBy'    => 'ca.cartId',
-                                //'class'      => 'col-product-image',
-                                //'default'    => false,
                             ]
                         );
 
@@ -100,9 +115,6 @@ $view['slots']->set('headerTitle', $item->getCartId());
                             [
                                 'sessionVar' => 'cartline',
                                 'text'       => 'mautic.ecommerce.product',
-                                //'orderBy'    => 'ca.cartId',
-                                //'class'      => 'col-product-image',
-                                //'default'    => false,
                             ]
                         );
 
@@ -110,10 +122,8 @@ $view['slots']->set('headerTitle', $item->getCartId());
                             'MauticCoreBundle:Helper:tableheader.html.php',
                             [
                                 'sessionVar' => 'cartline',
-                                //'orderBy'    => 'ca.shopId',
                                 'text'       => 'mautic.ecommerce.quantity',
-                                //'class'      => 'col-product-name',
-                                //'default'    => true,
+
                             ]
                         );
 
@@ -122,8 +132,6 @@ $view['slots']->set('headerTitle', $item->getCartId());
                             [
                                 'sessionVar' => 'cartline',
                                 'text'       => 'mautic.ecommerce.unitprice',
-                                //'class'      => 'col-product-name',
-                                //'default'    => false,
                             ]
                         );
 
@@ -132,8 +140,6 @@ $view['slots']->set('headerTitle', $item->getCartId());
                             [
                                 'sessionVar' => 'cartline',
                                 'text'       => 'mautic.ecommerce.total',
-                                //'class'      => 'col-product-name',
-                                //'default'    => false,
                             ]
                         );
                         ?>
@@ -143,7 +149,6 @@ $view['slots']->set('headerTitle', $item->getCartId());
                     <tbody>
                     <?php $total=0; ?>
                     <?php foreach ($item->getCartLines() as $k => $item): ?>
-                        <?php //echo dump($item); ?>
                         <tr>
                             <td class="visible-md visible-lg">
 
@@ -169,18 +174,18 @@ $view['slots']->set('headerTitle', $item->getCartId());
                             <td class="visible-md visible-lg">
                                 <span><?php echo $item->getQuantity(); ?></span></span>
                             </td>
-                            <td class="visible-md visible-lg"><?php echo $item->getProduct()->getPrice(); ?></td>
-                            <td class="visible-md visible-lg">
+                            <td class="visible-md visible-lg text-right"><?php echo '$ ' .number_format($item->getProduct()->getPrice(), 2); //TODO CURRENCY ?></td>
+                            <td class="visible-md visible-lg text-right">
                                 <?php $totalRow=((float)$item->getProduct()->getPrice() * (float)$item->getQuantity()); ?>
                                 <?php $total= $total + $totalRow; ?>
-                                <?php echo $totalRow; ?>
+                                <?php echo '$ ' .number_format($totalRow, 2); //TODO CURRENCY ?></td>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                     <tr>
                         <td colspan="3" style="visibility:hidden;"></td>
-                        <td><?php echo$view['translator']->trans('mautic.ecommerce.total');?></td>
-                        <td><?php echo $total; ?></td>
+                        <td><?php echo $view['translator']->trans('mautic.ecommerce.total');?></td>
+                        <td class="text-right"><?php echo '$ ' .number_format($total, 2); //TODO CURRENCY ?></td>
                     </tr>
                     </tbody>
                 </table>

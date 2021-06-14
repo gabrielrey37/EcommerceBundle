@@ -10,7 +10,7 @@
  */
 $view->extend('MauticCoreBundle:Default:content.html.php');
 $view['slots']->set('mauticContent', 'order');
-$view['slots']->set('headerTitle', $view['translator']->trans('mautic.ecommerce.order'));
+$view['slots']->set('headerTitle', $view['translator']->trans('mautic.ecommerce.orders'));
 
 
 
