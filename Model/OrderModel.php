@@ -5,6 +5,7 @@ namespace MauticPlugin\EcommerceBundle\Model;
 use Mautic\CoreBundle\Helper\Chart\ChartQuery;
 use Mautic\CoreBundle\Helper\Chart\LineChart;
 use Mautic\CoreBundle\Model\FormModel;
+use Mautic\LeadBundle\Entity\Lead;
 use MauticPlugin\EcommerceBundle\Entity\Cart;
 use MauticPlugin\EcommerceBundle\Entity\Order;
 use MauticPlugin\EcommerceBundle\Form\Type\CartType;
@@ -67,4 +68,21 @@ class OrderModel extends FormModel{
         return $q->execute()->fetchAll();
     }
 
+    public function getOrdersByLead (Lead $lead)
+    {
+        return $this->getRepository()->getEntities(
+            [
+                'filter' => [
+                    'force' => [
+                        [
+                            'column' => 'ord.lead',
+                            'expr'   => 'eq',
+                            'value'  => $lead,
+                        ],
+                    ],
+                ],
+                'oderBy'         => 'ord.date_modified',
+                'orderByDir'     => 'ASC',
+            ]);
+    }
 }

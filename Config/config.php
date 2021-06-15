@@ -110,6 +110,13 @@ return array(
                     'mautic.cart.model.cart',
                 ],
             ],
+            'mautic.ecommerce.subscriber.ui_contact_integrations_tab' => [
+                'class'     => \MauticPlugin\EcommerceBundle\EventListener\UIContactIntegrationsTabSubscriber::class,
+                'arguments' => [
+                    'mautic.cart.model.cart',
+                    'mautic.order.model.order',
+                ],
+            ]
         ]
     ],
 );

@@ -8,16 +8,18 @@ Customer fields to relation with an external e-commerce (Customer Id - Guest Id)
 Override PgeModel HitPage to include product viewed<br>
 
 
-###Products
+##Products
 ![](docs/img/Products-01.png)
 ![](docs/img/Products-02.png)
 ![](docs/img/Products-03.png)
 
-###Carts
+##Carts
 ![](docs/img/Carts-01.png)
 ![](docs/img/Carts-02.png)
 
-###Orders
+##Orders
 ![](docs/img/Orders-01.png)
 ![](docs/img/Orders-02.png)
 
+##Lead
+![](docs/img/Lead-01.png)

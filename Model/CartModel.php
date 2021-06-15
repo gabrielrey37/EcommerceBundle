@@ -5,8 +5,11 @@ namespace MauticPlugin\EcommerceBundle\Model;
 use Mautic\CoreBundle\Helper\Chart\ChartQuery;
 use Mautic\CoreBundle\Helper\Chart\LineChart;
 use Mautic\CoreBundle\Model\FormModel;
+use Mautic\LeadBundle\Entity\Lead;
 use MauticPlugin\EcommerceBundle\Entity\Cart;
 use MauticPlugin\EcommerceBundle\Form\Type\CartType;
+
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 
@@ -66,35 +69,21 @@ class CartModel extends FormModel{
         return $q->execute()->fetchAll();
     }
 
-
-    public function getViewsLineChartData($unit, \DateTime $dateFrom, \DateTime $dateTo, $dateFormat = null, $filter = [], $canViewOthers = true)
-    {
-        $chart = new LineChart($unit, $dateFrom, $dateTo, $dateFormat);
-        $chart->colors = ['#00B49C', '#4E5D9D', '#FD9572', '#FDB933', '#757575', '#9C4E5C', '#694535', '#596935'];
-        $query = new ChartQuery($this->em->getConnection(), $dateFrom, $dateTo);
-        $q     = $query->prepareTimeDataQuery('page_hits', 'date_hit', $filter);
-
-
-        if (!$canViewOthers) {
-            $q->andWhere('ca.created_by = :userId')
-              ->setParameter('userId', $this->userHelper->getUser()->getId());
-        }
-
-        $data = $query->loadAndBuildTimeData($q);
-
-        $chart->setDataset($this->translator->trans('mautic.ecommerce.viewscount'), $data);
-
-        return $chart->render();
+    public function getCartsByLead (Lead $lead){
+        return $this->getRepository()->getEntities(
+            [
+                'filter' => [
+                    'force' => [
+                        [
+                            'column' => 'ca.lead',
+                            'expr'   => 'eq',
+                            'value'  => $lead,
+                        ],
+                    ],
+                ],
+                'oderBy'         => 'ca.date_modified',
+                'orderByDir'     => 'ASC',
+            ]);
     }
 
-    public function abandonedCart(){
-        $orderRepository = $this->em->getRepository('EcommerceBundle:Order');
-        $order = $orderRepository->findOneBy([
-            'cart' => $this,
-        ]);
-        if ($order){
-            return 'comprado';
-        }
-        return 'Abandonado';
-    }
 }
