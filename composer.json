@@ -1,0 +1,11 @@
+{
+  "name": "gabrielrey37/ecommerce-bundle",
+  "description": "Ecommerce for Mautic",
+  "type": "mautic-plugin",
+  "require": {
+    "mautic/core-lib": "^4.0"
+  },
+  "extra": {
+    "install-directory-name": "EcommerceBundle"
+  }
+}
